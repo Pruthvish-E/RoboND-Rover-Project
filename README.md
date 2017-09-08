@@ -1,64 +1,42 @@
 ## Project: Search and Sample Return
-### Writeup Template: You can use this file as a template for your writeup if you want to submit it as a markdown file, but feel free to use some other method and submit a pdf if you prefer.
+### Instructions on how to setup dependencies and the simulator can be found [here](./Udacity_README.md).
+
+### A comprehensive discussion around implementation decisions can be found on this [Medium post](https://medium.com/@fernandojaruchenunes/udacity-robond-project-1-search-and-sample-return-2d8165a53a78).
 
 ---
-
-
-**The goals / steps of this project are the following:**  
-
-**Training / Calibration**  
-
-* Download the simulator and take data in "Training Mode"
-* Test out the functions in the Jupyter Notebook provided
-* Add functions to detect obstacles and samples of interest (golden rocks)
-* Fill in the `process_image()` function with the appropriate image processing steps (perspective transform, color threshold etc.) to get from raw images to a map.  The `output_image` you create in this step should demonstrate that your mapping pipeline works.
-* Use `moviepy` to process the images in your saved dataset with the `process_image()` function.  Include the video you produce as part of your submission.
-
-**Autonomous Navigation / Mapping**
-
-* Fill in the `perception_step()` function within the `perception.py` script with the appropriate image processing functions to create a map and update `Rover()` data (similar to what you did with `process_image()` in the notebook). 
-* Fill in the `decision_step()` function within the `decision.py` script with conditional statements that take into consideration the outputs of the `perception_step()` in deciding how to issue throttle, brake and steering commands. 
-* Iterate on your perception and decision function until your rover does a reasonable (need to define metric) job of navigating and mapping.  
 
 [//]: # (Image References)
 
 [image1]: ./misc/rover_image.jpg
-[image2]: ./calibration_images/example_grid1.jpg
-[image3]: ./calibration_images/example_rock1.jpg 
 
-## [Rubric](https://review.udacity.com/#!/rubrics/916/view) Points
-### Here I will consider the rubric points individually and describe how I addressed each point in my implementation.  
 
----
-### Writeup / README
-
-#### 1. Provide a Writeup / README that includes all the rubric points and how you addressed each one.  You can submit your writeup as markdown or pdf.  
-
-You're reading it!
-
-### Notebook Analysis
-#### 1. Run the functions provided in the notebook on test images (first with the test data provided, next on data you have recorded). Add/modify functions to allow for color selection of obstacles and rock samples.
-Here is an example of how to include an image in your writeup.
+**Results**
 
 ![alt text][image1]
 
-#### 1. Populate the `process_image()` function with the appropriate analysis steps to map pixels identifying navigable terrain, obstacles and rock samples into a worldmap.  Run `process_image()` on your test data using the `moviepy` functions provided to create video output of your result. 
-And another! 
+The Rover does a good job following the left wall avoiding trouble by getting unstuck if necessary. It also collects most of the sample rocks it finds on its path. It maps up to 97% of the terrain with a fidelity of 73.5%.
 
-![alt text][image2]
-### Autonomous Navigation and Mapping
+Bellow is a 8x video of the Rover from start to finish:  
 
-#### 1. Fill in the `perception_step()` (at the bottom of the `perception.py` script) and `decision_step()` (in `decision.py`) functions in the autonomous mapping scripts and an explanation is provided in the writeup of how and why these functions were modified as they were.
+**Improvements and Future Work**
+
+I'm really happy with my submission but there are a few things I wish I had the time to tackle:
+
+**Return to the starting point**
+
+The final piece of the puzzle was to have the Rover to go back to the initial position and come to a complete stop. Unfortunately I'm already a week past the suggested deadline so I'll have to skip this one.
+There are many ways to implement this but the easiest (and for what I would go first) would be to save the initial position when the simulation starts and query if the Rover is close to this position AND all (or most) of the rock samples have been already collected. This condition would bring the Rover to a new state: "home"
+Once in the home state the Rover would, just like for the rock state, slow down and steer on the direction of the initial position, stoping when close enough.
+
+**Collect all the sample rocks**
+
+One of the problems that I notice with my state machine is that it goes back to a previous state whenever a rock is no longer in sight. This is problematic for rocks that are hidden under tight spots. When the Rover approaches and breaks violently that causes the camera to miss the rock for a few frames causing the state to go back to forward mode skipping the rock completely.
+To solve this would require improvements on both the state tracking and also the control of the Rover to avoid slamming the breaks when approaching a rock.
 
 
-#### 2. Launching in autonomous mode your rover can navigate and map autonomously.  Explain your results and how you might improve them in your writeup.  
+**Use a PID controller to avoid oscillating behavior**
 
-**Note: running the simulator with different choices of resolution and graphics quality may produce different results, particularly on different machines!  Make a note of your simulator settings (resolution and graphics quality set on launch) and frames per second (FPS output to terminal by `drive_rover.py`) in your writeup when you submit the project so your reviewer can reproduce your results.**
+Lastly, I would like to use a PID controller to make the Rover steering feel smoother and more natural. I’ve checked and PID controller is going to be covered in future lessons.
 
-Here I'll talk about the approach I took, what techniques I used, what worked and why, where the pipeline might fail and how I might improve it if I were going to pursue this project further.  
-
-
-
-![alt text][image3]
 
 
