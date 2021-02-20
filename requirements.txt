@@ -1,0 +1,6 @@
+opencv-python
+python-engineio==3.4.3
+python-socketio==3.1.2
+eventlet
+matplotlib
+flask
